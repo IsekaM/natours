@@ -24,6 +24,7 @@ const homeController = {
   }
 };
 
+// Controllers
 const tourAPI = {
   getAll(req, res) {
     res.status(200).json({
@@ -131,13 +132,24 @@ const tourAPI = {
   }
 };
 
+// Middleware
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log('Hello from the middleware');
+  next();
+});
 
-app.get('/', homeController.index);
-app.get('/api/v1/tours', tourAPI.getAll);
-app.get('/api/v1/tours/:id', tourAPI.getID);
-app.post('/api/v1/tours', tourAPI.post);
-app.patch('/api/v1/tours/:id', tourAPI.patch);
-app.delete('/api/v1/tours/:id', tourAPI.delete);
+// Routes
+app
+  .route('/api/v1/tours')
+  .get(tourAPI.getAll)
+  .post(tourAPI.post);
 
+app
+  .route('/api/v1/tours/:id')
+  .get(tourAPI.getID)
+  .patch(tourAPI.patch)
+  .delete(tourAPI.delete);
+
+// Exposing server to the world
 app.listen(port, logServerStartUp);
