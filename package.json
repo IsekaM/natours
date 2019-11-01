@@ -1,0 +1,14 @@
+{
+  "name": "express-project",
+  "version": "1.0.0",
+  "description": "Learning express with mongodb to build apis and such.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Makesi Morrison",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
