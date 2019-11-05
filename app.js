@@ -9,6 +9,7 @@ const log = console.log;
 
 // Middleware
 app.use(express.json());
+app.use(express.static('./public/'));
 app.use((req, res, next) => {
   console.log('Hello from the middleware 👋');
   next();

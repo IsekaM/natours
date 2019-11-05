@@ -1,5 +1,6 @@
 // Including module
 const fs = require('fs');
+const log = console
 
 // Reading JSON file/database
 const tourData = JSON.parse(
@@ -21,17 +22,12 @@ toursController.api.getAll = (req, res) => {
 toursController.api.getID = (req, res) => {
   const id = parseInt(req.params.id);
   const tour = tourData.find(item => item.id === id);
-  if (tour) {
-    res.status(200).json({
-      status: 200,
-      data: {
-        tour: tour
-      }
-    });
-    return;
-  }
-
-  res.status(404).send('Tour');
+  res.status(200).json({
+    status: 200,
+    data: {
+      tour: tour
+    }
+  });
 };
 
 toursController.api.post = (req, res) => {
@@ -60,12 +56,6 @@ toursController.api.patch = (req, res) => {
   const id = parseInt(req.params.id);
   const body = req.body;
   const tour = tourData.find(item => item.id === id);
-
-  if (!tour) {
-    res.status(404);
-    res.send('File does not exist in database.');
-    return;
-  }
 
   for (const key in body) {
     tourData
@@ -97,11 +87,6 @@ toursController.api.delete = (req, res) => {
   const id = parseInt(req.params.id);
   const tourIndex = tourData.findIndex(item => item.id === id);
 
-  if (tourIndex < 0) {
-    res.send('Unable to find tour.');
-    return;
-  }
-
   tourData.splice(tourIndex, 1);
   fs.writeFile(
     `${__dirname}../dev-data/data/tours-simple.json`,
@@ -116,6 +101,30 @@ toursController.api.delete = (req, res) => {
       res.send('Data successfully deleted');
     }
   );
+};
+
+toursController.api.checkID = (req, res, next, val) => {
+  const value = parseInt(val);
+  if (value > tourData.length || value < 0) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID'
+    });
+  }
+
+  next();
+};
+
+toursController.api.checkBody = (req, res, next) => {
+  const body = req.body;
+  if (!body.name || !body.price) {
+    return res.status(400).json({
+      status: 'bad request',
+      message: 'Please provide name and price'
+    });
+  }
+
+  next();
 };
 
 module.exports = toursController;
