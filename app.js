@@ -5,13 +5,13 @@ const usersRouter = require('./routes/userRoutes');
 
 // Helper Functions
 const app = express();
-const log = console.log;
+const { log } = console;
 
 // Middleware
 app.use(express.json());
 app.use(express.static('./public/'));
 app.use((req, res, next) => {
-  console.log('Hello from the middleware 👋');
+  log('Hello from the middleware 👋');
   next();
 });
 
